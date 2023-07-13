@@ -6,7 +6,7 @@ module.exports = {
 
   output: {
     path: path.resolve(__dirname, 'dist'),
-    publicPath: path.resolve(__dirname, 'dist'),
+    publicPath: '/',
     filename: 'bundle.js',
   },
 
@@ -26,17 +26,16 @@ module.exports = {
       // match the output 'publicPath'
       publicPath: '/',
     },
+
+    // headers: { 'Access-Control-Allow-Origin': '*' },
+
     // proxy required to make api calls to express server while using hot-reload webpack server
     proxy: {
-      '/animals/**': {
+      '/log/**': {
         target: 'http://localhost:3000/',
         secure: false,
       },
-      '/behaviors/**': {
-        target: 'http://localhost:3000/',
-        secure: false,
-      },
-      '/medical/**': {
+      '/data/**': {
         target: 'http://localhost:3000/',
         secure: false,
       },
@@ -64,4 +63,7 @@ module.exports = {
       },
     ],
   },
+  node: {
+        global: true
+    }
 };

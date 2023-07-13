@@ -2,7 +2,6 @@
 const express = require("express");
 const path = require("path");
 const fs = require("fs");
-const cookieParser = require("cookie-parser");
 
 // set express functionality to app and establish PORT
 const app = express();
@@ -14,24 +13,29 @@ app.use(express.urlencoded({ extended: true}))
 
 // handle requests for static files
 app.use(express.static(path.resolve(__dirname, '../src')))
+// serve index.html on the route '/'
+app.get('/', (req, res) => {
+  console.log('first')
+  return res.status(200).sendFile(path.join(__dirname, '../src/index.html'));
+});
 
-// TODO: require router
-const exampleRouter = require("./routes/exampleRouter.js");
+// require router
+const logRouter = require('./routes/logRouter.js');
+// const dataRouter = require('./routes/dataRouter.js')
 
 // convert incoming requests to JSON
 app.use(express.json());
-app.use("*", express.urlencoded({ extended: true }));
-appendFile.use(cookieParser());
+// app.use('*', express.urlencoded({ extended: true }));
 
-// TODO: handle requests for static files
+// handle specific route requests
+app.use('/log', logRouter);
+// app.use('/data', dataRouter);
 
-// TODO: handle specific route requests
-app.use("/api", exampleRouter);
-
-// TODO: handle generic request to serve HTML file
-app.get("/", (req, res) => {
-  res.status(200).sendFile(path.resolve(__dirname, "../client/index.html"));
-});
+// // TODO: handle generic request to serve HTML file
+// app.get("/", (req, res) => {
+//   console.log('app.get(/) response');
+//   res.status(200).sendFile(path.resolve(__dirname, "../client/index.html"));
+// });
 
 // TODO: catch-all route for unknown requests
 app.use((req, res) => {
